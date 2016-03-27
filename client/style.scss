@@ -1,15 +1,24 @@
 @import "{wolves:bourbon}/bourbon";
 
+body {
+  padding-bottom: 2em;
+}
+
+.row-spaced,
+.bottom-spaced {
+  margin-bottom: 15px
+}
+
 @media (max-width: 768px) {
-  body { font-size: 10px }
+  svg { font-size: 10px }
 }
 
 @media (max-height: 768px) {
-  body { font-size: 10px }
+  svg { font-size: 10px }
 }
 
 @media (min-width: 769px) and (min-height: 769px) {
-  body { font-size: 14px }
+  svg { font-size: 14px }
 }
 
 .centered {

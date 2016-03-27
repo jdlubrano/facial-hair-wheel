@@ -13,9 +13,23 @@
       </div>
     </div>
     <div class="row">
-      <div class="centered">
-        <span class="wheel-arrow glyphicon glyphicon-arrow-down"></span>
-        {{> wheel}}
+      <div class="col-sm-12 col-md-6">
+        <div class="centered">
+          <span class="wheel-arrow glyphicon glyphicon-arrow-down"></span>
+          {{> wheel}}
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6">
+        <div class="row row-spaced">
+          <div class="col-xs-12">
+            {{> spinForm}}
+          </div>
+        </div>
+        <div class="row row-spaced">
+          <div class="col-xs-12">
+            {{> rulesAndResults}}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,5 +38,35 @@
 <template name="wheel">
   <div id="wheel-container" class="wheel-container">
     <svg class="wheel"></svg>
+  </div>
+</template>
+
+<template name="spinForm">
+  <form id="spin-form" action="#" class="form-inline">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Spin It!</button>
+  </form>
+</template>
+
+<template name="rulesAndResults">
+  <ul class="nav nav-tabs bottom-spaced" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#results" role="tab" data-toggle="tab">Results</a>
+    </li>
+    <li role="presentation">
+      <a href="#rules" role="tab" data-toggle="tab">Rules</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="results">
+      Results
+    </div>
+    <div role="tabpanel" class="tab-pane" id="rules">
+      Rules
+    </div>
   </div>
 </template>
