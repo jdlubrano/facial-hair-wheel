@@ -1,6 +1,3 @@
-// counter starts at 0
-// Session.setDefault('counter', 0);
-
 var beards = [
   {
     name: 'Mustache'
@@ -25,6 +22,15 @@ var beards = [
   }
 ];
 
+Template.results.helpers({
+  beard: function() {
+    return Session.get('beard');
+  },
+  rotation: function() {
+    return Session.get('rotation');
+  }
+});
+
 Template.wheel.onRendered(function() {
   initWheel.call(this, beards);
 });
@@ -35,10 +41,12 @@ Template.wheel.helpers({
   }
 });
 
-Template.wheel.events({
-  'click button': function () {
-    // increment the counter when button is clicked
-    Session.set('counter', Session.get('counter') + 1);
+var spinWheel;
+
+Template.spinForm.events({
+  'submit form': function (e) {
+    e.preventDefault();
+    spinWheel();
   }
 });
 
@@ -56,7 +64,7 @@ function initWheel(data) {
   var cx = svgWidth / 2;
   var cy = svgHeight / 2;
 
-  var allWedges = svg.append('g');
+  var allWedges = svg.append('g').attr('class', 'wedges');
 
   var wedges = allWedges.selectAll('.wedge').data(data);
 
@@ -112,5 +120,18 @@ function initWheel(data) {
   allWedges.selectAll('.wedge')
     .attr('transform', rotateWedge)
   ;
+
+  spinWheel = function() {
+    function tween() {
+      return d3.interpolateString(
+        'rotate(' + [0, cx, cy].join(',') + ')',
+        'rotate(' + [720, cx, cy].join(',') + ')'
+      );
+    }
+    allWedges.transition()
+      .duration(2000)
+      .attrTween('transform', tween)
+    ;
+  };
 }
 

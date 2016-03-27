@@ -51,6 +51,14 @@
   </form>
 </template>
 
+<template name="rules">
+</template>
+
+<template name="results">
+  <p>Rotation: {{rotation}}</p>
+  <p>Beard: {{beard}}</p>
+</template>
+
 <template name="rulesAndResults">
   <ul class="nav nav-tabs bottom-spaced" role="tablist">
     <li role="presentation" class="active">
@@ -63,7 +71,7 @@
 
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="results">
-      Results
+      {{> results}}
     </div>
     <div role="tabpanel" class="tab-pane" id="rules">
       Rules
