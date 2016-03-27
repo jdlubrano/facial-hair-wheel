@@ -19,10 +19,11 @@ Template.wheel.events({
 });
 
 function initWheel() {
+  var w = document.getElementById('wheel-container').clientWidth;
   var svg = d3.select('.wheel');
-  var svgWidth = 350;
-  var svgHeight = 350;
-  var padding = 10;
+  var svgWidth = Math.min(350, w);
+  var svgHeight = svgWidth;
+  var padding = 1;
 
   var radius = svgWidth / 2 - padding;
   var cx = svgWidth / 2;
@@ -69,7 +70,7 @@ function initWheel() {
   for(var i = 0; i < 'Mustache'.length; i++) {
     text.append('tspan')
       .attr('rotate', '-90')
-      .text('Mustache'[i])
+      .text('Mustache'[i] + ' ')
     ;
   }
 

@@ -15,6 +15,7 @@
     <div class="row">
       <div class="jumbotron">
         <div class="centered">
+          <span class="wheel-arrow glyphicon glyphicon-arrow-down"></span>
           {{> wheel}}
         </div>
       </div>
@@ -23,7 +24,7 @@
 </body>
 
 <template name="wheel">
-  <div class="wheel-container">
+  <div id="wheel-container" class="wheel-container">
     <svg class="wheel"></svg>
   </div>
 </template>

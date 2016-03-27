@@ -1,11 +1,11 @@
+@import "{wolves:bourbon}/bourbon";
+
 .centered {
   text-align: center;
 }
 
 .wheel-container {
-  background: #ccc;
-  width: 450px;
-  height: 450px;
+  width: 100%;
   margin: auto;
   svg.wheel {
     width: 350px;
@@ -15,17 +15,31 @@
     }
     .wedge {
       .facial-hair-style {
-
+        font-family: monospace;
+        font-weight: bold;
       }
       text.vertical {
         writing-mode: tb-rl;
         -webkit-writing-mode: tb-rl;
         tspan {
-          font-family: monospace;
-          letter-spacing: 2px;
         }
       }
     }
   }
+}
+
+.wheel-arrow {
+  font-size: 20px;
+  @include animation(pulse 3s ease infinite);
+  @include filter(blur(0));
+  @include transform(translateZ(0));
+}
+
+/* Animations */
+
+@include keyframes(pulse) {
+  0% { @include transform(scale(1)); }
+  50% { @include transform(scale(1.25)); }
+  100% { @include transform(scale(1)); }
 }
 
