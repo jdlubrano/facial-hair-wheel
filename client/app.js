@@ -1,27 +1,3 @@
-var beards = [
-  {
-    name: 'Mustache'
-  },
-  {
-    name: 'Full Beard'
-  },
-  {
-    name: 'Mutton Chops'
-  },
-  {
-    name: 'Soul Patch'
-  },
-  {
-    name: 'Clean Shaven'
-  },
-  {
-    name: 'Goatee'
-  },
-  {
-    name: 'Colonel B.'
-  }
-];
-
 Session.setDefault('rotation', 0);
 
 Template.results.helpers({
@@ -34,13 +10,8 @@ Template.results.helpers({
 });
 
 Template.wheel.onRendered(function() {
-  initWheel.call(this, beards);
-});
-
-Template.wheel.helpers({
-  counter: function () {
-    return Session.get('counter');
-  }
+  initWheel.call(this);
+  this.autorun(drawWheel);
 });
 
 var spinWheel;
@@ -52,23 +23,27 @@ Template.spinForm.events({
   }
 });
 
-function initWheel(data) {
+function initWheel() {
+  var self = this;
   var w = document.getElementById('wheel-container').clientWidth;
-  var svg = d3.select('.wheel');
-  var svgWidth = Math.min(500, w);
-  var svgHeight = svgWidth;
-  svg.attr('width', svgWidth).attr('height', svgHeight);
-  var padding = 10;
+  self.svgWidth = Math.min(500, w);
+  self.svgHeight = self.svgWidth;
+  self.svg = d3.select('.wheel')
+    .attr('width', self.svgWidth)
+    .attr('height', self.svgHeight)
+  ;
+  self.padding = 10;
+  self.svg.append('g').attr('class', 'wedges');
+}
+
+function drawWheel() {
+  var self = Template.instance();
+  var data = Beards.find().fetch();
 
   var wedgeSize = 360.0 / data.length;
-
-  var radius = svgWidth / 2 - padding;
-  var cx = svgWidth / 2;
-  var cy = svgHeight / 2;
-
-  var allWedges = svg.append('g').attr('class', 'wedges');
-
-  var wedges = allWedges.selectAll('.wedge').data(data);
+  var radius = self.svgWidth / 2 - self.padding;
+  var cx = self.svgWidth / 2;
+  var cy = self.svgHeight / 2;
 
   function radToX(radians) {
     return cx + radius * Math.cos(radians);
@@ -97,31 +72,34 @@ function initWheel(data) {
 
   var colorScale = d3.scale.category10();
 
-  var newWedges = wedges.enter().append('g').attr('class', 'wedge');
+  var allWedges = self.svg.selectAll('.wedges');
+  var wedges = allWedges.selectAll('.wedge').data(data);
 
-  newWedges.append('path')
-    .attr('class', 'wedge-path')
+  var newWedges = wedges.enter().append('g').attr('class', 'wedge');
+  newWedges.append('path').attr('class', 'wedge-path');
+  newWedges.append('text').attr('class', 'facial-hair-style vertical');
+
+  wedges.select('.wedge-path')
     .attr('d', drawWedge)
     .attr('fill', function(d, i) {
       return colorScale(i);
     })
   ;
 
-  newWedges.append('text')
-    .attr('class', 'facial-hair-style vertical')
+  var textRotation = 'rotate(' + [wedgeSize / 2, cx, cy].join(',') + ')';
+
+  wedges.select('.facial-hair-style')
     .attr('x', cx)
     .attr('y', 20)
-    .text(function(d) {
+    .text(function(d, i) {
       return d.name;
     })
-    .attr('transform', function(d, i) {
-      return 'rotate(' + [wedgeSize / 2, cx, cy].join(',') + ')';
-    });
+    .attr('transform', textRotation)
   ;
 
-  allWedges.selectAll('.wedge')
-    .attr('transform', rotateWedge)
-  ;
+  wedges.attr('transform', rotateWedge);
+
+  wedges.exit().remove();
 
   spinWheel = function() {
     var prevRotation = Session.get('rotation');
@@ -146,6 +124,7 @@ function randomInt(min, max) {
 }
 
 function updateBeard() {
+  var beards = Beards.find().fetch();
   var wedgeSize = 360.0 / beards.length;
   var spins = Session.get('rotation') / 360;
   var wholeSpins = Math.floor(spins);
