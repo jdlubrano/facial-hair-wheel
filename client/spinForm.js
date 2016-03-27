@@ -1,16 +1,3 @@
-Session.setDefault('rotation', 0);
-
-Template.results.helpers({
-  beard: function() {
-    return Session.get('beard');
-  },
-  rotation: function() {
-    return Session.get('rotation');
-  }
-});
-
-var spinWheel;
-
 Template.spinForm.events({
   'submit form': function (e) {
     e.preventDefault();

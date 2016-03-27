@@ -1,3 +1,5 @@
+Session.setDefault('rotation', 0);
+
 var cx,
     cy,
     radius,
