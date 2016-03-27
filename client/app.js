@@ -1,8 +1,32 @@
 // counter starts at 0
 // Session.setDefault('counter', 0);
 
+var beards = [
+  {
+    name: 'Mustache'
+  },
+  {
+    name: 'Full Beard'
+  },
+  {
+    name: 'Mutton Chops'
+  },
+  {
+    name: 'Soul Patch'
+  },
+  {
+    name: 'Clean Shaven'
+  },
+  {
+    name: 'Goatee'
+  },
+  {
+    name: 'Colonel B.'
+  }
+];
+
 Template.wheel.onRendered(function() {
-  initWheel.call(this);
+  initWheel.call(this, beards);
 });
 
 Template.wheel.helpers({
@@ -18,57 +42,74 @@ Template.wheel.events({
   }
 });
 
-function initWheel() {
+function initWheel(data) {
   var w = document.getElementById('wheel-container').clientWidth;
   var svg = d3.select('.wheel');
-  var svgWidth = Math.min(350, w);
+  var svgWidth = Math.min(500, w);
   var svgHeight = svgWidth;
-  var padding = 1;
+  svg.attr('width', svgWidth).attr('height', svgHeight);
+  var padding = 10;
+
+  var wedgeSize = 360.0 / data.length;
 
   var radius = svgWidth / 2 - padding;
   var cx = svgWidth / 2;
   var cy = svgHeight / 2;
 
-  var circle = svg.append('circle')
-    .attr('r', radius)
-    .attr('cx', cx)
-    .attr('cy', cy)
-  ;
-
   var allWedges = svg.append('g');
 
-  var wedge = allWedges.append('g').attr('class', 'wedge');
+  var wedges = allWedges.selectAll('.wedge').data(data);
 
-  function drawWedge() {
-   return 'M' + [cx,cy].join(',') + 
-    ' L' + [cx, cy - radius].join(',') +
-    ' A' + [radius, radius].join(',') +
-    ' 0 0, 1 ' + [cx + radius, cy].join(',') +
-    ' z';
+  function radToX(radians) {
+    return cx + radius * Math.cos(radians);
   }
 
-  function rotateWedge(wedge, i) {
-    return 'rotate(' + [90 * i - 45, cx, cy].join(',') + ')';
+  function radToY(radians) {
+    return cy - radius * Math.sin(radians);
+  }
+
+  function drawWedge() {
+    wedgeRadians = (Math.PI / 2) - (2 * Math.PI / data.length);
+    var coords = {
+      start: [cx, radToY(Math.PI / 2)],
+      end: [radToX(wedgeRadians), radToY(wedgeRadians)]
+    };
+    return 'M' + [cx,cy].join(',') +
+      ' L' + coords.start.join(',') +
+      ' A' + [radius, radius].join(',') +
+      ' 0 0, 1 ' + coords.end.join(',') +
+      ' z';
+  }
+
+  function rotateWedge(d, i) {
+    return 'rotate(' + [wedgeSize * i - wedgeSize / 2, cx, cy].join(',') + ')';
   }
 
   var colorScale = d3.scale.category10();
 
-  wedge.append('path')
+  var newWedges = wedges.enter().append('g').attr('class', 'wedge');
+
+  newWedges.append('path')
+    .attr('class', 'wedge-path')
     .attr('d', drawWedge)
-    .attr('fill', colorScale(0))
+    .attr('fill', function(d, i) {
+      return colorScale(i);
+    })
   ;
 
-  var text = wedge.append('text')
+  newWedges.append('text')
     .attr('class', 'facial-hair-style vertical')
     .attr('x', cx)
     .attr('y', 20)
-    .text('Mustache')
+    .text(function(d) {
+      return d.name;
+    })
     .attr('transform', function(d, i) {
-      return 'rotate(' + [45, cx, cy].join(',') + ')';
+      return 'rotate(' + [wedgeSize / 2, cx, cy].join(',') + ')';
     });
   ;
 
-  var wedges = allWedges.selectAll('.wedge')
+  allWedges.selectAll('.wedge')
     .attr('transform', rotateWedge)
   ;
 }

@@ -1,5 +1,17 @@
 @import "{wolves:bourbon}/bourbon";
 
+@media (max-width: 768px) {
+  body { font-size: 10px }
+}
+
+@media (max-height: 768px) {
+  body { font-size: 10px }
+}
+
+@media (min-width: 769px) and (min-height: 769px) {
+  body { font-size: 14px }
+}
+
 .centered {
   text-align: center;
 }
@@ -8,23 +20,19 @@
   width: 100%;
   margin: auto;
   svg.wheel {
-    width: 350px;
-    height: 350px;
     circle {
       fill: #ffbb00;
     }
     .wedge {
       .facial-hair-style {
-        font-family: monospace;
         font-weight: bold;
+        font-size: 1em;
       }
       text.vertical {
         writing-mode: vertical-rl;
         text-orientation: upright;
         -webkit-writing-mode: vertical-rl;
         -webkit-text-orientation: upright;
-        tspan {
-        }
       }
     }
   }
