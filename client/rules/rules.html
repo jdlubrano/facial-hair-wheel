@@ -1,3 +1,16 @@
 <template name="rules">
+  <div class="page-header">
+    <h4>Official Rules</h4>
+  </div>
+  {{#each rules}}
+    {{> rule}}
+  {{/each}}
+</template>
+
+<template name="rule">
+  <blockquote class="rule">
+    {{text}}
+    <footer>{{added_by}}</footer>
+  </blockquote>
 </template>
 
