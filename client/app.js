@@ -22,6 +22,8 @@ var beards = [
   }
 ];
 
+Session.setDefault('rotation', 0);
+
 Template.results.helpers({
   beard: function() {
     return Session.get('beard');
@@ -122,16 +124,34 @@ function initWheel(data) {
   ;
 
   spinWheel = function() {
+    var prevRotation = Session.get('rotation');
+    var rotation = Math.floor(prevRotation + randomInt(360 * 5, 360 * 10));
     function tween() {
       return d3.interpolateString(
-        'rotate(' + [0, cx, cy].join(',') + ')',
-        'rotate(' + [720, cx, cy].join(',') + ')'
+        'rotate(' + [prevRotation, cx, cy].join(',') + ')',
+        'rotate(' + [rotation, cx, cy].join(',') + ')'
       );
     }
     allWedges.transition()
-      .duration(2000)
+      .duration(4000)
       .attrTween('transform', tween)
     ;
+    Session.set('rotation', rotation);
+    updateBeard();
   };
+}
+
+function randomInt(min, max) {
+  return Math.ceil(Math.random() * (max - min) + min);
+}
+
+function updateBeard() {
+  var wedgeSize = 360.0 / beards.length;
+  var spins = Session.get('rotation') / 360;
+  var wholeSpins = Math.floor(spins);
+  var extraDegrees = (spins - wholeSpins) * 360 + wedgeSize / 2; // initial offset
+  var i = Math.floor(extraDegrees / wedgeSize) % beards.length;
+  var landedOn = (i === 0) ? i : beards.length - i;
+  Session.set('beard', beards[landedOn].name);
 }
 
