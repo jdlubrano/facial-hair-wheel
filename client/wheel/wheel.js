@@ -41,7 +41,6 @@ function rotateWedge(d, i) {
 Template.wheel.onRendered(function() {
   initWheel.call(this);
   this.autorun(drawWheel);
-  debugger;
   $('body').on('spin.wheel', spinWheel);
 });
 
