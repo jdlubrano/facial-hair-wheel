@@ -19,8 +19,10 @@
         font-weight: bold;
       }
       text.vertical {
-        writing-mode: tb-rl;
-        -webkit-writing-mode: tb-rl;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        -webkit-writing-mode: vertical-rl;
+        -webkit-text-orientation: upright;
         tspan {
         }
       }

@@ -61,18 +61,12 @@ function initWheel() {
   var text = wedge.append('text')
     .attr('class', 'facial-hair-style vertical')
     .attr('x', cx)
-    .attr('y', 30)
+    .attr('y', 20)
+    .text('Mustache')
     .attr('transform', function(d, i) {
       return 'rotate(' + [45, cx, cy].join(',') + ')';
     });
   ;
-
-  for(var i = 0; i < 'Mustache'.length; i++) {
-    text.append('tspan')
-      .attr('rotate', '-90')
-      .text('Mustache'[i] + ' ')
-    ;
-  }
 
   var wedges = allWedges.selectAll('.wedge')
     .attr('transform', rotateWedge)
