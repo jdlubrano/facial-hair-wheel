@@ -11,12 +11,20 @@
     width: 350px;
     height: 350px;
     circle {
-      stroke: #ffffff;
-      stroke-width: 5px;
       fill: #ffbb00;
     }
     .wedge {
-      fill: black;
+      .facial-hair-style {
+
+      }
+      text.vertical {
+        writing-mode: tb-rl;
+        -webkit-writing-mode: tb-rl;
+        tspan {
+          font-family: monospace;
+          letter-spacing: 2px;
+        }
+      }
     }
   }
 }
